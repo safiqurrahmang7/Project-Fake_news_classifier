@@ -181,9 +181,8 @@ The project utilizes the **WELFake** dataset, which contains 72,134 news article
   - Create the final Jupyter notebook, ensuring it is well-organized and includes all steps.
 
 ### **Day 14: Submission and Review**
-- **Morning:**
+
   - Submit the notebook along with the F1-score and predictions.
   - Review and refine the README file and other documentation.
-- **Afternoon:**
-  - Final project review and wrap-up.
+
 
