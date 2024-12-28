@@ -1,0 +1,20 @@
+# Ignore Python virtual environment
+venv/
+*.pyc
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+
+#ignore all .exe file
+*.exe
