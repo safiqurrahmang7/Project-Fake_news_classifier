@@ -1,0 +1,38 @@
+# Core Libraries
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+
+# Deep Learning Libraries
+tensorflow
+keras
+torch
+torchtext
+
+# Natural Language Processing (NLP)
+nltk
+spacy
+gensim
+
+# For Data Preprocessing and Tokenization
+scipy
+keras-preprocessing
+tfds-nightly
+
+# For Hyperparameter Tuning and Experimentation
+optuna
+
+
+# For Logging and Monitoring (Optional)
+tensorboard
+mlflow
+
+# Other dependencies (if required for your project)
+joblib
+beautifulsoup4
+requests
+
+# Version control dependencies for reproducibility
+pip

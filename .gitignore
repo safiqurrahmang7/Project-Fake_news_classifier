@@ -18,3 +18,11 @@ Thumbs.db
 
 #ignore all .exe file
 *.exe
+
+# Ignore the data folder
+data/
+
+# Ignore specific large files
+data/processed/fake_news_eda.csv
+data/processed/fake_news_processed.csv
+data/raw/WELFake_Dataset.csv
