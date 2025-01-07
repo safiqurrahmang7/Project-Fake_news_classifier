@@ -20,7 +20,7 @@ class model_evaluation(model_evaluating):
 class model_evaluator:
 
     def __init__(self, evaluator = model_evaluating):
-        self.evaluator = evaluator()
+        self.evaluator = evaluator
 
     def evaluate_model(self, model, X_test, y_test):
         self.evaluator.evaluate(model, X_test, y_test)

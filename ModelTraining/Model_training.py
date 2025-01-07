@@ -24,7 +24,7 @@ model = builder.apply_model_builder()
 model.fit(xtrain, ytrain, epochs=10, batch_size=128, validation_data=(xtest, ytest))
 
 #initializing the model evaluator
-evaluator = model_evaluator(model_evaluation())
+evaluator = model_evaluator(model_evaluation)
 
 # Evaluating the model
 evaluator.evaluate_model(model, xtest, ytest)
