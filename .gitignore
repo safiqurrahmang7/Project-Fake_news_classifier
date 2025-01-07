@@ -23,6 +23,6 @@ Thumbs.db
 data/
 
 # Ignore specific large files
-data/processed/fake_news_eda.csv
-data/processed/fake_news_processed.csv
-data/raw/WELFake_Dataset.csv
+fake_news_eda.csv
+fake_news_processed.csv
+WELFake_Dataset.csv
