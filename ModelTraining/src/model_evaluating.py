@@ -9,6 +9,8 @@ class model_evaluating(ABC):
 class model_evaluation(model_evaluating):
     def evaluate(model, X_test):
         y_pred = model.predict(X_test)
+        if y_pred is None:
+            raise ValueError("The model's predict method returned None. Check the model and input data.")
         y_pred_classes = (y_pred > 0.5).astype(int)
 
         return y_pred_classes
