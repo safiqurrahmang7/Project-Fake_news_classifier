@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 import spacy
 import re
 from abc import ABC, abstractmethod
@@ -12,7 +10,7 @@ class text_preprocessing(ABC):
 class text_preprocessing_spacy(text_preprocessing):
 
     def __init__(self):
-        self.nlp = spacy.load('en_core_web_sm', disable=["tok2vec", "tagger", "parser", "attribute_ruler", "ner"])
+        self.nlp = spacy.load('en_core_web_sm', disable=["tok2vec", "tagger", "parser", "attribute_ruler"])
 
     def process(self, text):
 
@@ -26,7 +24,7 @@ class text_preprocessing_spacy(text_preprocessing):
         doc = self.nlp(lowered_text)
 
         # Removed stop words and punctuation
-        lemmatized = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
+        lemmatized = [token.lemma_ for token in doc if  not token.is_punct]
 
         return ' '.join(lemmatized)
     
