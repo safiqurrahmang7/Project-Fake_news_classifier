@@ -83,7 +83,8 @@ try:
 
         #Evaluation metrics
         logging.info("Calculating accuracy metrics...")
-        accuracyScore = accuracy_score(ytest, ypred)
+        evaluation = model_evaluating(accuracy)
+        accuracy = accuracy_score(ytest, ypred)
 
         # Classification report
         logging.info("Calculating classification report...")
