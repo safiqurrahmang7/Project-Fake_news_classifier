@@ -1,6 +1,5 @@
 from pyexpat import model
 import pandas as pd
-from src.text_preprocessing import text_preprocessing_spacy, text_processor
 from src.feature_engineering import feature_engineer, text_feature_engineering
 from src.data_splitter import train_test_splitter, data_split
 from src.model_building import Build_LSTM_model, model_builder
