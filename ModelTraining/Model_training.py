@@ -88,17 +88,17 @@ try:
         # Classification report
         logging.info("Calculating classification report...")
         evaluation = model_evaluating(classification)
-        classification_report = evaluation.evaluate_model(ytest, ypred)
+        classificationReport = evaluation.evaluate_model(ytest, ypred)
 
         # Confusion matrix
         logging.info("Calculating confusion matrix...")
         evaluation = model_evaluating(confusion)
-        confusion_matrix = evaluation.evaluate_model(ytest, ypred)
+        confusionMatrix = confusion_matrix(ytest, ypred)
 
         # Log metrics
         logging.info("Logging metrics...")
         mlflow.log_metric("accuracy", accuracy)
-        for key, value in classification_report.items():  # Assuming a dict structure for the report
+        for key, value in classificationReport.items():  # Assuming a dict structure for the report
             mlflow.log_metric(f"precision_{key}", value["precision"])
             mlflow.log_metric(f"recall_{key}", value["recall"])
             mlflow.log_metric(f"f1-score_{key}", value["f1-score"])
@@ -114,7 +114,7 @@ try:
 
 
         plt.figure(figsize=(8, 6))
-        sns.heatmap(confusion_matrix, annot=True, fmt='d', cmap='Blues')
+        sns.heatmap(confusionMatrix, annot=True, fmt='d', cmap='Blues')
         plt.title("Confusion Matrix")
         plt.xlabel("Predicted")
         plt.ylabel("Actual")
