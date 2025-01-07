@@ -13,9 +13,14 @@ class model_evaluation(model_evaluating):
         # Check model summary and input shape
         print(model.summary())
         print(f"Expected input shape: {model.input_shape}")
+        print(f"Raw predictions (first 5): {y_pred[:5] if y_pred is not None else 'None'}")
         y_pred = model.predict(X_test)
+        # Validate y_pred
         if y_pred is None:
-            raise ValueError("The model's predict method returned None. Check the model and input data.")
+            print("The model's predict method returned None.")
+            raise ValueError("The model's predict method returned None.")
+
+        # Convert predictions to binary classes
         y_pred_classes = (y_pred > 0.5).astype(int)
 
         return y_pred_classes
