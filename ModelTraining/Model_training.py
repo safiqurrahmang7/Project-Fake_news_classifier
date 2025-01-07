@@ -100,9 +100,12 @@ try:
         logging.info("Logging metrics...")
         mlflow.log_metric("accuracy", accuracy)
         for key, value in classificationReport.items():  # Assuming a dict structure for the report
-            mlflow.log_metric(f"precision_{key}", value["precision"])
-            mlflow.log_metric(f"recall_{key}", value["recall"])
-            mlflow.log_metric(f"f1-score_{key}", value["f1-score"])
+            if isinstance(value, dict):
+                mlflow.log_metric(f"precision_{key}", value["precision"])
+                mlflow.log_metric(f"recall_{key}", value["recall"])
+                mlflow.log_metric(f"f1-score_{key}", value["f1-score"])
+            else:
+                logging.info(f"Skipping key '{key}' as it is not a dictionary.")
 
         # Save the model and confusion matrix as artifacts
         logging.info("Logging model and artifacts...")
