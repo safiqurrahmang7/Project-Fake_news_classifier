@@ -62,11 +62,7 @@ try:
         logging.info("Starting model training...")
         epochs = 10
         batch_size = 128
-        history = model.fit(
-            xtrain, ytrain,
-            epochs=epochs,
-            batch_size=batch_size,
-            validation_split=0.1,  # Added validation split
+        history = model.fit(xtrain, ytrain, epochs=10, batch_size=128, validation_data=(xtest, ytest), verbose=2,
             callbacks=[
                 tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
             ]
