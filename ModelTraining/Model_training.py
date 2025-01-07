@@ -17,7 +17,7 @@ xtrain, xtest, ytrain, ytest = splitter.split_data(engineered_features, df['labe
 print(xtrain.shape, xtest.shape, ytrain.shape, ytest.shape)
 
 # Initializing the model builder
-builder = model_builder(builder=Build_LSTM_model(max_len))
+builder = model_builder(builder=Build_LSTM_model())
 model = builder.apply_model_builder()
 
 # Training the model
