@@ -12,9 +12,9 @@ class feature_engineering(ABC):
 
 class text_feature_engineering(feature_engineering):
 
-    def __init__(self, max_len = 200, column = 'text'):
+    def __init__(self, column = 'text'):
 
-        self.max_len = max_len
+        
         self.column = column
     
     def engineering(self, df):
