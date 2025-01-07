@@ -34,4 +34,4 @@ class model_evaluator:
         self.evaluator = evaluator
 
     def evaluate_model(self, model, X_test):
-        self.evaluator.evaluate(model, X_test)
+        return self.evaluator.evaluate(model, X_test)
