@@ -14,29 +14,33 @@ class Build_model(ABC):
 
 class Build_LSTM_model(Build_model):
 
+
+
     def build_model(self):
+
         model = Sequential()
-        model.add(Embedding(input_dim=10000,output_dim = 256, input_length=200))  # Embedding layer
+        model.add(Embedding(input_dim=10000,output_dim = 256, input_length=1000))  # Embedding layer
         model.add(SpatialDropout1D(0.3))
         model.add(LSTM(128, return_sequences=True))  # Bidirectional LSTM layer
         model.add(Dropout(0.3))  # Dropout for regularization
         model.add(LSTM(64))  # Another Bidirectional LSTM layer
         model.add(Dropout(0.3))
-        model.add(Dense(1, activation='sigmoid'))  # Output layer   
+        model.add(Dense(1, activation='sigmoid'))  # Output layer for binary classification
 
-        model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy', metrics=['accuracy'])
-
+        # Compiling the model
+        model.compile(loss='binary_crossentropy', optimizer=Adam(learning_rate=0.001), metrics=['accuracy'])
         return model
     
+
 class model_builder:
 
-    def __init__(self, model_builder = Build_model):
-        self.model_builder = model_builder
+    def __init__(self, builder = Build_model):
+
+        self.builder = builder
 
     def apply_model_builder(self):
 
-        self.model_builder.build_model()
-
+        return self.builder.build_model()
 
 
     

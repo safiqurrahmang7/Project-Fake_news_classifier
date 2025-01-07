@@ -21,7 +21,7 @@ class train_test_splitter(data_splitter):
 class data_split:
 
     def __init__(self, splitter = data_splitter):
-        self.splitter = splitter()
+        self.splitter = splitter
 
     def split_data(self, feature, target):
         return self.splitter.split_data(feature, target)

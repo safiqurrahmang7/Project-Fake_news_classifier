@@ -12,22 +12,24 @@ class feature_engineering(ABC):
 
 class text_feature_engineering(feature_engineering):
 
-    def __init__(self, max_len = 1000,column = 'text'):
-        self.max_len = max_len
-        self.tokenizer = Tokenizer()
-        self.column = column
+    def __init__(self, max_len = 1000, column = 'text'):
 
+        self.max_len = max_len
+        self.column = column
+    
     def engineering(self, df):
-        self.tokenizer.fit_on_texts(df[self.column])
-        sequences = self.tokenizer.texts_to_sequences(df[self.column])
-        padded_sequences = pad_sequences(sequences, maxlen=self.max_len, padding='post', truncating='post')
-        return padded_sequences
+        df[self.column] = df[self.column].astype(str)
+        tokenizer = Tokenizer(num_words=10000, oov_token="<OOV>")
+        tokenizer.fit_on_texts(df[self.column])
+        sequences = tokenizer.texts_to_sequences(df[self.column])
+        padded_text = pad_sequences(sequences,maxlen = 1000, padding='post', truncating='post')
+        return padded_text
     
 class feature_engineer:
 
     def __init__(self, engineer = feature_engineering):
 
-        self.engineer = engineer()
+        self.engineer = engineer
 
     def apply_engineering(self, df):
 
