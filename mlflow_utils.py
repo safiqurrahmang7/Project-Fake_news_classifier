@@ -29,3 +29,7 @@ def get_experiment(name:str=None,experiment_id:str=None)->mlflow.entities.experi
     else:
         raise ValueError('Either name or experiment_id must be provided')
     return experiment
+
+
+if __name__ == '__main__':
+    create_experiment('FakeNewsClassification', 'file:///content/mlruns', {'author':'John Doe'})

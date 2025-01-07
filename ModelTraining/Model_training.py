@@ -1,37 +1,113 @@
 import pandas as pd
+import mlflow
+import mlflow.keras
 from src.feature_engineering import feature_engineer, text_feature_engineering
 from src.data_splitter import train_test_splitter, data_split
 from src.model_building import Build_LSTM_model, model_builder
 from src.model_evaluating import model_evaluator, model_evaluation
+import logging
+from sklearn.model_selection import train_test_split
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-df = pd.read_csv('/content/fake_news_processed.csv')
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Initializing the feature engineer
-engineer = feature_engineer(text_feature_engineering(max_len=1000, column='text'))
-engineered_features = engineer.apply_engineering(df)
+# MLflow setup
+mlflow.set_experiment("FakeNewsClassification")  # Set or create the experiment name
 
-# Initializing the data splitter
-splitter = data_split(train_test_splitter(test_size=0.2, random_state=42))
-xtrain, xtest, ytrain, ytest = splitter.split_data(engineered_features, df['label'])
+try:
+    with mlflow.start_run():  # Start MLflow run
+        
+        # Load dataset
+        logging.info("Loading dataset...")
+        df = pd.read_csv('/content/fake_news_processed.csv')
+        if df.empty:
+            raise ValueError("Dataset is empty. Please check the CSV file.")
 
-print(xtrain.shape, xtest.shape, ytrain.shape, ytest.shape)
+        # Log dataset parameters
+        mlflow.log_param("dataset_path", "/content/fake_news_processed.csv")
+        mlflow.log_param("dataset_size", len(df))
 
-# Initializing the model builder
-builder = model_builder(builder=Build_LSTM_model())
-model = builder.apply_model_builder()
+        # Feature engineering
+        logging.info("Initializing feature engineering...")
+        max_len = 1000  # Hyperparameter
+        engineer = feature_engineer(text_feature_engineering(max_len=max_len, column='text'))
+        engineered_features = engineer.apply_engineering(df)
 
-# Training the model
-model.fit(xtrain, ytrain, epochs=10, batch_size=128, validation_data=(xtest, ytest))
+        # Log feature engineering parameters
+        mlflow.log_param("max_len", max_len)
+        mlflow.log_param("feature_column", "text")
 
-#initializing the model evaluator
-evaluator = model_evaluator(model_evaluation)
+        # Data splitting
+        logging.info("Splitting data into train and test sets...")
+        test_size = 0.2
+        random_state = 42
+        xtrain, xtest, ytrain, ytest = train_test_split(
+            engineered_features, df['label'], test_size=test_size, random_state=random_state
+        )
+        logging.info(f"Train-Test split completed: {xtrain.shape}, {xtest.shape}, {ytrain.shape}, {ytest.shape}")
 
-# Evaluating the model
-evaluator.evaluate_model(model, xtest, ytest)
+        # Log splitting parameters
+        mlflow.log_param("test_size", test_size)
+        mlflow.log_param("random_state", random_state)
+
+        # Model building
+        logging.info("Building the LSTM model...")
+        builder = model_builder(builder=Build_LSTM_model())
+        model = builder.apply_model_builder()
+
+        # Model training
+        logging.info("Starting model training...")
+        epochs = 10
+        batch_size = 128
+        history = model.fit(
+            xtrain, ytrain,
+            epochs=epochs,
+            batch_size=batch_size,
+            validation_split=0.1,  # Added validation split
+            callbacks=[
+                tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+            ]
+        )
+
+        # Log training parameters
+        mlflow.log_param("epochs", epochs)
+        mlflow.log_param("batch_size", batch_size)
+        mlflow.log_param("validation_split", 0.1)
+
+        # Model evaluation
+        logging.info("Evaluating the model...")
+        evaluator = model_evaluator(model_evaluation)
+        classification_report, accuracy, confusion_matrix = evaluator.evaluate_model(model, xtest, ytest)
+
+        # Log metrics
+        mlflow.log_metric("accuracy", accuracy)
+        for key, value in classification_report.items():  # Assuming a dict structure for the report
+            mlflow.log_metric(f"precision_{key}", value["precision"])
+            mlflow.log_metric(f"recall_{key}", value["recall"])
+            mlflow.log_metric(f"f1-score_{key}", value["f1-score"])
+
+        # Save the model and confusion matrix as artifacts
+        logging.info("Logging model and artifacts...")
+        model.save("lstm_model.h5")
+        mlflow.keras.log_model(model, "model")
+        mlflow.log_artifact("lstm_model.h5", artifact_path="model")
+        
+        # Save confusion matrix
+        confusion_matrix_path = "confusion_matrix.png"
 
 
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(confusion_matrix, annot=True, fmt='d', cmap='Blues')
+        plt.title("Confusion Matrix")
+        plt.xlabel("Predicted")
+        plt.ylabel("Actual")
+        plt.savefig(confusion_matrix_path)
+        mlflow.log_artifact(confusion_matrix_path)
 
+        logging.info("MLflow logging completed successfully.")
 
-
-
-
+except Exception as e:
+    logging.error(f"An error occurred: {e}")
