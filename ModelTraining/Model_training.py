@@ -117,7 +117,7 @@ try:
         logging.info("Logging model and artifacts...")
 
         # Save the model locally
-        model.save("lstm_model.h5")
+        model.save("lstm_model.keras")
 
         # Log the model with MLflow
         mlflow.keras.log_model(
