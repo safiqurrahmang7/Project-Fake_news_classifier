@@ -15,7 +15,7 @@ class Build_LSTM_model(Build_model):
     def build_model(self):
 
         model = Sequential()
-        model.add(Embedding(input_dim=10000,output_dim = 256, input_length=1000))  # Embedding layer
+        model.add(Embedding(input_dim=10000,output_dim = 256))  # Embedding layer
         model.add(SpatialDropout1D(0.3))
         model.add(LSTM(128, return_sequences=True))  # Bidirectional LSTM layer
         model.add(Dropout(0.3))  # Dropout for regularization

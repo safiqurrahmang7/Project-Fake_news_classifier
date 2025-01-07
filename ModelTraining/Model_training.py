@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import mlflow
 import mlflow.keras
 from src.feature_engineering import feature_engineer, text_feature_engineering
@@ -12,6 +13,7 @@ from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
+from mlflow.models.signature import infer_signature
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -107,10 +109,25 @@ try:
             else:
                 logging.info(f"Skipping key '{key}' as it is not a dictionary.")
 
+       # Assuming X_test is the test dataset or input to the model
+        input_example = xtest[:1]  # Use the first sample as an example input
+        signature = infer_signature(xtest, model.predict(xtest[:1]))  # Infer the signature
+
         # Save the model and confusion matrix as artifacts
         logging.info("Logging model and artifacts...")
+
+        # Save the model locally
         model.save("lstm_model.h5")
-        mlflow.keras.log_model(model, "model")
+
+        # Log the model with MLflow
+        mlflow.keras.log_model(
+            keras_model=model,
+            artifact_path="model",
+            input_example=input_example,  # Add the input example
+            signature=signature           # Add the signature
+        )
+
+        # Log the saved model file as an artifact
         mlflow.log_artifact("lstm_model.h5", artifact_path="model")
         
         # Save confusion matrix
