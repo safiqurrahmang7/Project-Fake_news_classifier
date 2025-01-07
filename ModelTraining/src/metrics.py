@@ -16,7 +16,7 @@ class classification(Evluation_metrics):
         return classification_report(y_true, y_pred)
 
 class confusion(Evluation_metrics):
-    def evaluate(sf,y_true, y_pred):
+    def evaluate(y_true, y_pred):
         return confusion_matrix(y_true, y_pred)
 
 class model_evaluating:
