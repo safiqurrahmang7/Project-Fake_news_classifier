@@ -7,7 +7,7 @@ class model_evaluating(ABC):
         pass
 
 class model_evaluation(model_evaluating):
-    def evaluate(model, X_test, y_test):
+    def evaluate(model, X_test):
         y_pred = model.predict(X_test)
         y_pred_classes = (y_pred > 0.5).astype(int)
 
