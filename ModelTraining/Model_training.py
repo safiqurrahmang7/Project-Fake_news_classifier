@@ -79,7 +79,7 @@ try:
         logging.info("Evaluating the model...")
         evaluator = model_evaluator(model_evaluation)
         ypred = evaluator.evaluate_model(model, xtest)
-        print(f"Raw predictions (first 5): {ypred[:5] if y_pred is not None else 'None'}")
+        print(f"Raw predictions (first 5): {ypred[:5] if ypred is not None else 'None'}")
 
         #Evaluation metrics
         logging.info("Calculating accuracy metrics...")
