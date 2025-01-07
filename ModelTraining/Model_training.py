@@ -6,7 +6,7 @@ from src.data_splitter import train_test_splitter, data_split
 from src.model_building import Build_LSTM_model, model_builder
 from src.model_evaluating import model_evaluator, model_evaluation
 
-df = pd.read_csv('D:/Project-Fake_news_classifier/processed_data/fake_news_processed.csv')
+df = pd.read_csv('/content/fake_news_processed.csv')
 
 # Initializing the feature engineer
 engineer = feature_engineer(text_feature_engineering(max_len=1000, column='text'))
