@@ -5,6 +5,7 @@ from src.feature_engineering import feature_engineer, text_feature_engineering
 from src.data_splitter import train_test_splitter, data_split
 from src.model_building import Build_LSTM_model, model_builder
 from src.model_evaluating import model_evaluator, model_evaluation
+from src.metrics import classification, accuracy, confusion, model_evaluating
 import logging
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
@@ -32,12 +33,11 @@ try:
 
         # Feature engineering
         logging.info("Initializing feature engineering...")
-        max_len = 1000  # Hyperparameter
+        
         engineer = feature_engineer(text_feature_engineering(column='text'))
         engineered_features = engineer.apply_engineering(df)
 
         # Log feature engineering parameters
-        mlflow.log_param("max_len", max_len)
         mlflow.log_param("feature_column", "text")
 
         # Data splitting
@@ -76,7 +76,19 @@ try:
         # Model evaluation
         logging.info("Evaluating the model...")
         evaluator = model_evaluator(model_evaluation)
-        classification_report, accuracy, confusion_matrix = evaluator.evaluate_model(model, xtest, ytest)
+        ypred_classes = evaluator.evaluate_model(model, xtest, ytest)
+
+        #Evaluation metrics
+        evaluation = model_evaluating(accuracy)
+        accuracy = evaluation.evaluate(ytest, ypred_classes)
+
+        # Classification report
+        evaluation = model_evaluating(classification)
+        classification_report = evaluation.evaluate(ytest, ypred_classes)
+
+        # Confusion matrix
+        evaluation = model_evaluating(confusion)
+        confusion_matrix = evaluation.evaluate(ytest, ypred_classes)
 
         # Log metrics
         mlflow.log_metric("accuracy", accuracy)
