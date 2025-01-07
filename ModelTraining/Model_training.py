@@ -33,7 +33,7 @@ try:
         # Feature engineering
         logging.info("Initializing feature engineering...")
         max_len = 1000  # Hyperparameter
-        engineer = feature_engineer(text_feature_engineering(max_len=max_len, column='text'))
+        engineer = feature_engineer(text_feature_engineering(column='text'))
         engineered_features = engineer.apply_engineering(df)
 
         # Log feature engineering parameters
