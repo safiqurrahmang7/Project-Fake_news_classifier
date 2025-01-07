@@ -10,11 +10,7 @@ class Build_model(ABC):
     def build_model():
         pass
 
-
-
 class Build_LSTM_model(Build_model):
-
-
 
     def build_model(self):
 

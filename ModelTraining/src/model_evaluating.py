@@ -9,7 +9,7 @@ class model_evaluating(ABC):
 
 class model_evaluation(model_evaluating):
 
-    def evaluate(self, model, X_test, y_test):
+    def evaluate(model, X_test, y_test):
         y_pred = model.predict_classes(X_test)
         classification_report = classification_report(y_test, y_pred)
         accuracy = accuracy_score(y_test, y_pred)
