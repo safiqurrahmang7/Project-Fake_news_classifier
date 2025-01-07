@@ -79,16 +79,19 @@ try:
         ypred_classes = evaluator.evaluate_model(model, xtest, ytest)
 
         #Evaluation metrics
+        logging.info("Calculating accuracy metrics...")
         evaluation = model_evaluating(accuracy)
-        accuracy = evaluation.evaluate(ytest, ypred_classes)
+        accuracy = evaluation.evaluate_model(ytest, ypred_classes)
 
         # Classification report
+        logging.info("Calculating classification report...")
         evaluation = model_evaluating(classification)
-        classification_report = evaluation.evaluate(ytest, ypred_classes)
+        classification_report = evaluation.evaluate_model(ytest, ypred_classes)
 
         # Confusion matrix
+        logging.info("Calculating confusion matrix...")
         evaluation = model_evaluating(confusion)
-        confusion_matrix = evaluation.evaluate(ytest, ypred_classes)
+        confusion_matrix = evaluation.evaluate_model(ytest, ypred_classes)
 
         # Log metrics
         mlflow.log_metric("accuracy", accuracy)
