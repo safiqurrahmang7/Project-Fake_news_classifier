@@ -96,6 +96,7 @@ try:
         confusion_matrix = evaluation.evaluate_model(ytest, ypred)
 
         # Log metrics
+        logging.info("Logging metrics...")
         mlflow.log_metric("accuracy", accuracy)
         for key, value in classification_report.items():  # Assuming a dict structure for the report
             mlflow.log_metric(f"precision_{key}", value["precision"])
