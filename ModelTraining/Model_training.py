@@ -77,22 +77,22 @@ try:
         # Model evaluation
         logging.info("Evaluating the model...")
         evaluator = model_evaluator(model_evaluation)
-        ypred_classes = evaluator.evaluate_model(model, xtest)
+        ypred = evaluator.evaluate_model(model, xtest)
 
         #Evaluation metrics
         logging.info("Calculating accuracy metrics...")
         evaluation = model_evaluating(accuracy)
-        accuracy = evaluation.evaluate_model(ytest, ypred_classes)
+        accuracy = evaluation.evaluate_model(ytest, ypred)
 
         # Classification report
         logging.info("Calculating classification report...")
         evaluation = model_evaluating(classification)
-        classification_report = evaluation.evaluate_model(ytest, ypred_classes)
+        classification_report = evaluation.evaluate_model(ytest, ypred)
 
         # Confusion matrix
         logging.info("Calculating confusion matrix...")
         evaluation = model_evaluating(confusion)
-        confusion_matrix = evaluation.evaluate_model(ytest, ypred_classes)
+        confusion_matrix = evaluation.evaluate_model(ytest, ypred)
 
         # Log metrics
         mlflow.log_metric("accuracy", accuracy)
