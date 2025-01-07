@@ -13,7 +13,7 @@ class accuracy(Evluation_metrics):
 
 class classification(Evluation_metrics):
     def evaluate(y_true, y_pred):
-        return classification_report(y_true, y_pred)
+        return classification_report(y_true, y_pred, output_dict=True)
 
 class confusion(Evluation_metrics):
     def evaluate(y_true, y_pred):
