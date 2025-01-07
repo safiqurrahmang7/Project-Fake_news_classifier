@@ -12,11 +12,11 @@ class model_evaluation(model_evaluating):
     def evaluate(model, X_test, y_test):
         y_pred = model.predict(X_test)
         y_pred_classes = (y_pred > 0.5).astype(int)
-        classification_report = classification_report(y_test, y_pred_classes)
+        Classification_report = classification_report(y_test, y_pred_classes)
         accuracy = accuracy_score(y_test, y_pred_classes)
-        confusion_matrix = confusion_matrix(y_test, y_pred_classes)
+        Confusion_matrix = confusion_matrix(y_test, y_pred_classes)
 
-        return classification_report, accuracy, confusion_matrix
+        return Classification_report, accuracy, Confusion_matrix
 
 class model_evaluator:
 
