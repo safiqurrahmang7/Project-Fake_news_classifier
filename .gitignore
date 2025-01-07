@@ -19,8 +19,7 @@ Thumbs.db
 #ignore all .exe file
 *.exe
 
-# Ignore the data folder
-data/
+
 
 # Ignore specific large files
 fake_news_eda.csv
