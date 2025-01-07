@@ -6,6 +6,7 @@ from src.data_splitter import train_test_splitter, data_split
 from src.model_building import Build_LSTM_model, model_builder
 from src.model_evaluating import model_evaluator, model_evaluation
 from src.metrics import classification, accuracy, confusion, model_evaluating
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import logging
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
@@ -78,11 +79,11 @@ try:
         logging.info("Evaluating the model...")
         evaluator = model_evaluator(model_evaluation)
         ypred = evaluator.evaluate_model(model, xtest)
+        print(f"Raw predictions (first 5): {ypred[:5] if y_pred is not None else 'None'}")
 
         #Evaluation metrics
         logging.info("Calculating accuracy metrics...")
-        evaluation = model_evaluating(accuracy)
-        accuracy = evaluation.evaluate_model(ytest, ypred)
+        accuracyScore = accuracy_score(ytest, ypred)
 
         # Classification report
         logging.info("Calculating classification report...")
