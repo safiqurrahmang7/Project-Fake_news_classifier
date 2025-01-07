@@ -23,6 +23,7 @@ class model_evaluation(model_evaluating):
 
         # Convert predictions to binary classes
         y_pred_classes = (y_pred > 0.5).astype(int)
+        print(f"Raw predictions (first 5): {y_pred_classes[:5] if y_pred is not None else 'None'}")
 
         return y_pred_classes
 
