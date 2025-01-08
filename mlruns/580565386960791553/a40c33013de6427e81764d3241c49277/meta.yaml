@@ -1,0 +1,15 @@
+artifact_uri: /content/Project-Fake_news_classifier/LSTM_artifacts/a40c33013de6427e81764d3241c49277/artifacts
+end_time: 1736356791398
+entry_point_name: ''
+experiment_id: '580565386960791553'
+lifecycle_stage: active
+run_id: a40c33013de6427e81764d3241c49277
+run_name: LSTM
+run_uuid: a40c33013de6427e81764d3241c49277
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736355972203
+status: 3
+tags: []
+user_id: root
