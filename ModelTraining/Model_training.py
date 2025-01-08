@@ -14,19 +14,22 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
 from mlflow.models.signature import infer_signature
+from mlflow_utils import create_experiment
+import json
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 # MLflow setup
-mlflow.set_experiment("FakeNewsClassification")  # Set or create the experiment name
+experiment_id= create_experiment(name = 'FakeNewsClassification', artifact_location ='LSTM_artifacts', tags = {'env':'dev'})
 
 try:
-    with mlflow.start_run():  # Start MLflow run
+    with mlflow.start_run(run_name='LSTM',experiment_id=experiment_id):  # Start MLflow run
         
         # Load dataset
         logging.info("Loading dataset...")
-        df = pd.read_csv('/content/fake_news_processed.csv')
+        df = pd.read_csv('D:/Project-Fake_news_classifier/ProcessedData/fake_news_processed.csv')
         if df.empty:
             raise ValueError("Dataset is empty. Please check the CSV file.")
         df = df.loc[0:1000]  # For testing purposes
@@ -109,31 +112,24 @@ try:
             else:
                 logging.info(f"Skipping key '{key}' as it is not a dictionary.")
 
-       # Assuming X_test is the test dataset or input to the model
-        input_example = xtest[:1]  # Use the first sample as an example input
-        signature = infer_signature(xtest, model.predict(xtest[:1]))  # Infer the signature
-
-        # Save the model and confusion matrix as artifacts
-        logging.info("Logging model and artifacts...")
-
         # Save the model locally
-        model.save("lstm_model.keras")
+        model.save("Models/lstm_model.keras")
 
         # Log the model with MLflow
         mlflow.keras.log_model(
-            keras_model=model,
+            model=model,
             artifact_path="model",
-            input_example=input_example,  # Add the input example
-            signature=signature           # Add the signature
         )
 
         # Log the saved model file as an artifact
-        mlflow.log_artifact("lstm_model.h5", artifact_path="model")
+        logging.info("Logging the model file as an artifact...")
+        mlflow.log_artifact("lstm_model.keras", artifact_path="model")
         
         # Save confusion matrix
-        confusion_matrix_path = "confusion_matrix.png"
+        logging.info("Saving confusion matrix...")
+        confusion_matrix_path = "artifacts/confusion_matrix.png"
 
-
+        logging.info("Plotting confusion matrix...")
         plt.figure(figsize=(8, 6))
         sns.heatmap(confusionMatrix, annot=True, fmt='d', cmap='Blues')
         plt.title("Confusion Matrix")
@@ -141,6 +137,30 @@ try:
         plt.ylabel("Actual")
         plt.savefig(confusion_matrix_path)
         mlflow.log_artifact(confusion_matrix_path)
+
+        accuracy_path = 'artifacts/accuracy.png'
+        logging.info('Savig the train and test accuracy')
+        plt.figure(figsize=(8,6))
+        plt.plot(history.history['accuracy'])
+        plt.plot(history.history['val_accuracy'])
+        plt.xlabel('epoch')
+        plt.ylabel('accuracy')
+        plt.legend(['Train','Test'])
+        plt.title('Distribution of ModelAccuracy')
+        plt.savefig(accuracy_path)
+        mlflow.log_artifact(accuracy_path)
+
+        loss_path = 'artifacts/loss.png'
+        logging.info('Saving the train and test loss')
+        plt.figure(figsize=(10,6))
+        plt.plot(history.history['loss'])
+        plt.plot(history.history['val_loss'])
+        plt.title('Distribution Of Train an Test Loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.legend(['train','test'])
+        plt.savefig(loss_path)
+        mlflow.log_artifact(loss_path)
 
         logging.info("MLflow logging completed successfully.")
 
