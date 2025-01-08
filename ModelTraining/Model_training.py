@@ -29,10 +29,10 @@ try:
         
         # Load dataset
         logging.info("Loading dataset...")
-        df = pd.read_csv('D:/Project-Fake_news_classifier/ProcessedData/fake_news_processed.csv')
+        df = pd.read_csv('/content/fake_news_processed.csv')
         if df.empty:
             raise ValueError("Dataset is empty. Please check the CSV file.")
-        df = df.loc[0:1000]  # For testing purposes
+        # df = df.loc[0:1000]  # For testing purposes
 
         # Log dataset parameters
         mlflow.log_param("dataset_path", "/content/fake_news_processed.csv")
