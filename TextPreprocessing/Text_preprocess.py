@@ -13,3 +13,4 @@ df['text'] = df['text'].apply(lambda text: processor.apply_processor(text))
 
 #saving the processed data
 df.to_csv('D:/Project-Fake_news_classifier/ProcessedData/fake_news_processed.csv',index=False)
+

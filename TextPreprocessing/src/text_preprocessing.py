@@ -37,3 +37,9 @@ class text_processor:
     
     def apply_processor(self, text):
         return self.processor.process(text)
+    
+if __name__ == '__main__':
+
+    preprocessor = text_processor(text_preprocessing_spacy)
+    expected = preprocessor.apply_processor('"This is a sample text with numbers 1234 and special characters!!!"')
+    print(expected)

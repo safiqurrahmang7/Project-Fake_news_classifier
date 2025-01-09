@@ -1,27 +1,33 @@
 import pandas as pd
 from abc import ABC, abstractmethod
 
-class dataset_saver(ABC):
+# Abstract class defining the interface for saving datasets
+class DatasetSaver(ABC):
 
     @abstractmethod
-    def save(df:pd.DataFrame):
+    def save(self, df: pd.DataFrame, path: str):
         pass
 
-class save_csv(dataset_saver):
+# Concrete class for saving a dataset as a CSV file
+class SaveCSV(DatasetSaver):
 
-    def save(df:pd.DataFrame, path:str):
-        df.to_csv(path, index=False)    
+    def save(self, df: pd.DataFrame, path: str):
+        df.to_csv(path, index=False)
 
-class dataset_saver:
+# Main class that uses the strategy pattern for saving datasets
+class DatasetSaverStrategy:
 
-    def __init__(self,saver = dataset_saver):
-        
+    def __init__(self, saver: DatasetSaver = None):
+        # Set a default saver if no saver is provided
+        if saver is None:
+            self.saver = SaveCSV()  # Default to SaveCSV if no saver is provided
+        else:
+            self.saver = saver
+
+    def set_saver(self, saver: DatasetSaver):
+        # Set a new saver strategy
         self.saver = saver
-    
-    def set_saver(self,saver = dataset_saver):
 
-        self.saver = saver
-
-    def apply_saver(self,df:pd.DataFrame, path:str):
-
+    def apply_saver(self, df: pd.DataFrame, path: str):
+        # Use the selected saver strategy to save the dataset
         self.saver.save(df, path)
