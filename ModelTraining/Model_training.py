@@ -56,10 +56,10 @@ try:
         )
         logging.info(f"Train-Test split completed: {xtrain.shape}, {xtest.shape}, {ytrain.shape}, {ytest.shape}")
 
-        # Log splitting parameters
-        mlflow.log_param("test_size", test_size)
-        mlflow.log_param("random_state", random_state)
-
+        # # Log splitting parameters
+        # mlflow.log_param("test_size", test_size)
+        # mlflow.log_param("random_state", random_state)
+        mlflow.keras.autolog()
         # Model building
         logging.info("Building the LSTM model...")
         builder = model_builder(builder=Build_LSTM_model())
@@ -75,9 +75,9 @@ try:
             ]
         )
 
-        # Log training parameters
-        mlflow.log_param("epochs", epochs)
-        mlflow.log_param("batch_size", batch_size)
+        # # Log training parameters
+        # mlflow.log_param("epochs", epochs)
+        # mlflow.log_param("batch_size", batch_size)
     
 
         # Model evaluation
@@ -101,29 +101,29 @@ try:
         evaluation = model_evaluating(confusion)
         confusionMatrix = confusion_matrix(ytest, ypred)
 
-        # Log metrics
-        logging.info("Logging metrics...")
-        mlflow.log_metric("accuracy", accuracy)
-        for key, value in classificationReport.items():  # Assuming a dict structure for the report
-            if isinstance(value, dict):
-                mlflow.log_metric(f"precision_{key}", value["precision"])
-                mlflow.log_metric(f"recall_{key}", value["recall"])
-                mlflow.log_metric(f"f1-score_{key}", value["f1-score"])
-            else:
-                logging.info(f"Skipping key '{key}' as it is not a dictionary.")
+        # # Log metrics
+        # logging.info("Logging metrics...")
+        # mlflow.log_metric("accuracy", accuracy)
+        # for key, value in classificationReport.items():  # Assuming a dict structure for the report
+        #     if isinstance(value, dict):
+        #         mlflow.log_metric(f"precision_{key}", value["precision"])
+        #         mlflow.log_metric(f"recall_{key}", value["recall"])
+        #         mlflow.log_metric(f"f1-score_{key}", value["f1-score"])
+        #     else:
+        #         logging.info(f"Skipping key '{key}' as it is not a dictionary.")
 
-        # Save the model locally
-        model.save("models/lstm_model.keras")
+        # # Save the model locally
+        # model.save("models/lstm_model.keras")
 
-        # Log the model with MLflow
-        mlflow.keras.log_model(
-            model=model,
-            artifact_path="model",
-        )
+        # # Log the model with MLflow
+        # mlflow.keras.log_model(
+        #     model=model,
+        #     artifact_path="model",
+        # )
 
         # Log the saved model file as an artifact
         logging.info("Logging the model file as an artifact...")
-        mlflow.log_artifact("lstm_model.keras", artifact_path="model")
+        mlflow.log_artifact("lstm_model.keras")
         
         # Save confusion matrix
         logging.info("Saving confusion matrix...")
